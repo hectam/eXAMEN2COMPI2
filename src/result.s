@@ -14,7 +14,7 @@ sub.s $f2, $f0, $f1
 mov.s $f0, $f2
 div.s $f2, $f0, $f1
 mov.s $f0, $f2
+c.lt.s $f2, $f1, $f0
 c.le.s $f2, $f0, $f1
-c.le.s $f2, $f0, $f1
-c.lt.s $f2, $f0, $f1
+c.eq.s $f0, $f1
 

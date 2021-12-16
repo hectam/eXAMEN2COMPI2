@@ -153,7 +153,7 @@ void GteExpr::genCode(Code &code){
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
     string newTemp = getFloatTemp();
-    code.code = "c.lt.s " + newTemp + ", " + rightCode.place   +", "+ leftCode.place+"\n";
+    code.code = "c.lt.s " + rightCode.place   +", "+ leftCode.place+"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
@@ -167,7 +167,7 @@ void LteExpr::genCode(Code &code){
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
     string newTemp = getFloatTemp();
-    code.code = "c.le.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+    code.code = "c.le.s " + leftCode.place  +", "+ rightCode.place +"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();

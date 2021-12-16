@@ -193,7 +193,7 @@ void ReadFloatExpr::genCode(Code &code){
 }
 
 string PrintStatement::genCode(){
-   
+   return "Return statement code generation\n";
 }
 
 string ReturnStatement::genCode(){

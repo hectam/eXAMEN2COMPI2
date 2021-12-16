@@ -81,10 +81,12 @@ this->expr1->genCode(leftCode);
 this->expr2->genCode(rightCode);
 code.code = leftCode.code + "\n" + rightCode.code + "\n";
 string newTemp = getFloatTemp();
-code.code = "sub.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+code.code += "sub.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
 releaseFloatTemp(leftCode.place);
 releaseFloatTemp(rightCode.place);
+cout<< code.code.c_str();
 code.place = newTemp;
+
 
 }
 
@@ -98,6 +100,7 @@ string newTemp = getFloatTemp();
 code.code = "div.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
 releaseFloatTemp(leftCode.place);
 releaseFloatTemp(rightCode.place);
+cout<< code.code.c_str();
 code.place = newTemp;
 }
 
@@ -113,6 +116,7 @@ void IdExpr::genCode(Code &code){
 string ExprStatement::genCode(){
     Code code;
     this->expr->genCode(code);
+    releaseFloatTemp(code.place);
     return code.place;
 }
 
@@ -141,12 +145,45 @@ string AssignationStatement::genCode(){
 }
 
 void GteExpr::genCode(Code &code){
+    Code leftCode;
+    Code rightCode;
+    this->expr1->genCode(leftCode);
+    this->expr2->genCode(rightCode);
+    code.code = leftCode.code + "\n" + rightCode.code + "\n";
+    string newTemp = getFloatTemp();
+    code.code = "c.le.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+    releaseFloatTemp(leftCode.place);
+    releaseFloatTemp(rightCode.place);
+    cout<< code.code.c_str();
+    code.place = newTemp;
 }
 
 void LteExpr::genCode(Code &code){
+    Code leftCode;
+    Code rightCode;
+    this->expr1->genCode(leftCode);
+    this->expr2->genCode(rightCode);
+    code.code = leftCode.code + "\n" + rightCode.code + "\n";
+    string newTemp = getFloatTemp();
+    code.code = "c.le.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+    releaseFloatTemp(leftCode.place);
+    releaseFloatTemp(rightCode.place);
+    cout<< code.code.c_str();
+    code.place = newTemp;
 }
 
 void EqExpr::genCode(Code &code){
+    Code leftCode;
+    Code rightCode;
+    this->expr1->genCode(leftCode);
+    this->expr2->genCode(rightCode);
+    code.code = leftCode.code + "\n" + rightCode.code + "\n";
+    string newTemp = getFloatTemp();
+    code.code = "c.lt.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+    releaseFloatTemp(leftCode.place);
+    releaseFloatTemp(rightCode.place);
+    cout<< code.code.c_str();
+    code.place = newTemp;
 }
 
 void ReadFloatExpr::genCode(Code &code){

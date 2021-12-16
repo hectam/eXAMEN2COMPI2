@@ -2,19 +2,29 @@
 
 .globl main
 .text
-li.s $f0, 5.6
-
-li.s $f0, 6.7
-
 l.s $f0, a
 
 l.s $f1, b
 
 sub.s $f2, $f0, $f1
 mov.s $f0, $f2
-div.s $f2, $f0, $f1
-mov.s $f0, $f2
-c.lt.s $f2, $f1, $f0
-c.le.s $f2, $f0, $f1
+
+mov.s $f12, $f2
+li $v0, 2
+syscall
+c.ge.s $f0, $f1
+
+mov.s $f12, $f0
+li $v0, 2
+syscall
+c.le.s $f0, $f1
+
+mov.s $f12, $f0
+li $v0, 2
+syscall
 c.eq.s $f0, $f1
+
+mov.s $f12, $f0
+li $v0, 2
+syscall
 

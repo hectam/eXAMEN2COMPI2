@@ -152,12 +152,13 @@ void GteExpr::genCode(Code &code){
     this->expr1->genCode(leftCode);
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
-    string newTemp = getFloatTemp();
-    code.code = "c.lt.s " + rightCode.place   +", "+ leftCode.place+"\n";
+  
+    code.code = "c.ge.s " + leftCode.place +", "+  rightCode.place+"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
-    code.place = newTemp;
+    code.place = leftCode.place;
+    
 }
 
 void LteExpr::genCode(Code &code){
@@ -166,12 +167,13 @@ void LteExpr::genCode(Code &code){
     this->expr1->genCode(leftCode);
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
-    string newTemp = getFloatTemp();
+   
     code.code = "c.le.s " + leftCode.place  +", "+ rightCode.place +"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
-    code.place = newTemp;
+    code.place = leftCode.place;
+   
 }
 
 void EqExpr::genCode(Code &code){
@@ -180,12 +182,12 @@ void EqExpr::genCode(Code &code){
     this->expr1->genCode(leftCode);
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
-    string newTemp = getFloatTemp();
+    
     code.code = "c.eq.s "  + leftCode.place  +", "+ rightCode.place +"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
-    code.place = newTemp;
+    code.place = leftCode.place;
 }
 
 void ReadFloatExpr::genCode(Code &code){
@@ -193,11 +195,32 @@ void ReadFloatExpr::genCode(Code &code){
 }
 
 string PrintStatement::genCode(){
-   return "Return statement code generation\n";
+   Code exprCode;
+    list<Expr *>::iterator printExpr = this->expressions.begin();
+    while (printExpr != expressions.end())
+    {
+        (*printExpr)->genCode(exprCode);
+        printExpr++;
+    }
+    stringstream code;
+    code<< exprCode.code<<endl;
+    code << "mov.s $f12, "<< exprCode.place<<endl
+    << "li $v0, 2"<<endl
+    << "syscall"<<endl;
+    return code.str();
 }
 
 string ReturnStatement::genCode(){
-    return "Return statement code generation\n";
+    Code exprCode;
+    this->expr->genCode(exprCode);
+    
+        releaseFloatTemp(exprCode.place);
+    
+
+    stringstream ss;
+    ss << exprCode.code << endl
+    << "move $v0, "<< exprCode.place <<endl;
+    return ss.str();
 }
 
 string MethodDefinitionStatement::genCode(){

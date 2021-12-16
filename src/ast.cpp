@@ -85,8 +85,8 @@ code.code += "sub.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place 
 code.code += "mov.s " + leftCode.place  + ", " + newTemp +"\n";
 releaseFloatTemp(leftCode.place);
 releaseFloatTemp(rightCode.place);
-
-code.place = code.code.c_str();
+cout<< code.code.c_str();
+code.place = newTemp;
 
 
 }
@@ -103,7 +103,7 @@ code.code += "mov.s " + leftCode.place  + ", " + newTemp +"\n";
 releaseFloatTemp(leftCode.place);
 releaseFloatTemp(rightCode.place);
 cout<< code.code.c_str();
-code.place = code.code;
+code.place = newTemp;
 }
 
 void IdExpr::genCode(Code &code){
@@ -119,7 +119,7 @@ string ExprStatement::genCode(){
     Code code;
     this->expr->genCode(code);
     releaseFloatTemp(code.place);
-    return code.place;
+    return code.code;
 }
 
 string IfStatement::genCode(){

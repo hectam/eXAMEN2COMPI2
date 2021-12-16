@@ -12,6 +12,9 @@ l.s $f1, b
 
 sub.s $f2, $f0, $f1
 mov.s $f0, $f2
-div.s $f3, $f0, $f1
-mov.s $f0, $f3
-$f4$f4$f4
+div.s $f2, $f0, $f1
+mov.s $f0, $f2
+c.le.s $f2, $f0, $f1
+c.le.s $f2, $f0, $f1
+c.lt.s $f2, $f0, $f1
+

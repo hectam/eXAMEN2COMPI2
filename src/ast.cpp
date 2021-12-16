@@ -43,8 +43,14 @@ const char * floatTemps[] = {"$f0",
 set<string> intTempMap;
 set<string> floatTempMap;
 
+int labelCounter = 0;
 extern Asm assemblyFile;
-
+string getNewLabel(string prefix){
+    stringstream ss;
+    ss<<prefix << labelCounter;
+    labelCounter++;
+    return ss.str();
+}
 int globalStackPointer = 0;
 
 map<string, int> codeGenerationVars;
@@ -123,7 +129,27 @@ string ExprStatement::genCode(){
 }
 
 string IfStatement::genCode(){
-    return "If statement code generation\n";
+    string endIfLabel = getNewLabel("endif");
+    Code exprCode;
+    this->conditionalExpr->genCode(exprCode);
+    stringstream code;
+    code << exprCode.code << endl;
+    
+    code << "bc1f "<< endIfLabel <<endl;
+
+    list<Statement*>::iterator expr = this->trueStatement.begin();
+    while (expr != trueStatement.end())
+    {
+       code<< (*expr)->genCode()<<endl;
+        expr++;
+    }
+
+    code<<   endl
+    << endIfLabel <<" :"<< endl;
+
+    releaseFloatTemp(exprCode.place);
+    
+    return code.str();
 }
 
 void MethodInvocationExpr::genCode(Code &code){
@@ -219,7 +245,7 @@ string ReturnStatement::genCode(){
 
     stringstream ss;
     ss << exprCode.code << endl
-    << "move $v0, "<< exprCode.place <<endl;
+    << "mov.s $v0, "<< exprCode.place <<endl;
     return ss.str();
 }
 

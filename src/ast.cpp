@@ -153,7 +153,7 @@ void GteExpr::genCode(Code &code){
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
     string newTemp = getFloatTemp();
-    code.code = "c.le.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+    code.code = "c.lt.s " + newTemp + ", " + rightCode.place   +", "+ leftCode.place+"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
@@ -181,7 +181,7 @@ void EqExpr::genCode(Code &code){
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
     string newTemp = getFloatTemp();
-    code.code = "c.lt.s " + newTemp + ", " + leftCode.place  +", "+ rightCode.place +"\n";
+    code.code = "c.eq.s "  + leftCode.place  +", "+ rightCode.place +"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
@@ -193,7 +193,19 @@ void ReadFloatExpr::genCode(Code &code){
 }
 
 string PrintStatement::genCode(){
-    return "Print statement code generation\n";
+    Code exprCode;
+    list<Expr *>::iterator expr = this->expressions.begin();
+    while (expr != expressions.end())
+    {
+        (*expr)->genCode(exprCode);
+        (*expr)++;
+    }
+    stringstream code;
+    code<< exprCode.code<<endl;
+    code << "mov.s $f12, "<< exprCode.place<<endl
+    << "li $v0, 2"<<endl
+    << "syscall"<<endl;
+    return code.str();
 }
 
 string ReturnStatement::genCode(){

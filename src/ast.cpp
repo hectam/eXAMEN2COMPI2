@@ -159,16 +159,14 @@ void MethodInvocationExpr::genCode(Code &code){
 string AssignationStatement::genCode(){
     
     Code Code;
-    stringstream ss;
-    
+      
     this->value->genCode(Code);
 
-    ss<< Code.code <<endl;
     IdExpr* fullExpre = (IdExpr *)this->value;
     string id = fullExpre->id;
     if(floatTempMap.find(id) == floatTempMap.end())
     releaseFloatTemp(Code.place);
-    Code.code = ss.str();
+    
     return Code.code;
 }
 
@@ -179,7 +177,7 @@ void GteExpr::genCode(Code &code){
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
   
-    code.code = "c.ge.s " + leftCode.place +", "+  rightCode.place+"\n";
+    code.code = "c.le.s " + rightCode.place  +", "+ leftCode.place+"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();
@@ -194,7 +192,7 @@ void LteExpr::genCode(Code &code){
     this->expr2->genCode(rightCode);
     code.code = leftCode.code + "\n" + rightCode.code + "\n";
    
-    code.code = "c.le.s " + leftCode.place  +", "+ rightCode.place +"\n";
+    code.code = "c.lt.s " + leftCode.place  +", "+ rightCode.place +"\n";
     releaseFloatTemp(leftCode.place);
     releaseFloatTemp(rightCode.place);
     cout<< code.code.c_str();

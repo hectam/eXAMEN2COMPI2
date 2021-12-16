@@ -2,48 +2,17 @@
 
 .globl main
 .text
-c.eq.s $f0, $f1
-
-bc1f endif0
-l.s $f0, b
-
-move $v0, $f0
-
-
-endif0 :
-c.eq.s $f0, $f1
-
-bc1f endif1
+li.s $f0, 5.6
+li.s $f0, 6.7
 l.s $f0, a
 
-move $v0, $f0
+l.s $f1, b
 
-
-endif1 :
-c.eq.s $f0, $f1
-
-bc1f endif2
-l.s $f0, a
-
-move $v0, $f0
-
-
-endif2 :
+sub.s $f2, $f0, $f1
+mov.s $f0, $f2
+div.s $f2, $f0, $f1
+mov.s $f0, $f2
 c.ge.s $f0, $f1
-
-bc1f endif3
-l.s $f0, a
-
-move $v0, $f0
-
-
-endif3 :
-l.s $f0, a
-
-move $v0, $f0
-l.s $f0, b
-
-mov.s $f12, $f0
-li $v0, 2
-syscall
+c.le.s $f0, $f1
+c.eq.s $f0, $f1
 

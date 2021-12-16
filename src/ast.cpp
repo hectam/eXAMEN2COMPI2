@@ -193,19 +193,7 @@ void ReadFloatExpr::genCode(Code &code){
 }
 
 string PrintStatement::genCode(){
-    Code exprCode;
-    list<Expr *>::iterator expr = this->expressions.begin();
-    while (expr != expressions.end())
-    {
-        (*expr)->genCode(exprCode);
-        (*expr)++;
-    }
-    stringstream code;
-    code<< exprCode.code<<endl;
-    code << "mov.s $f12, "<< exprCode.place<<endl
-    << "li $v0, 2"<<endl
-    << "syscall"<<endl;
-    return code.str();
+   
 }
 
 string ReturnStatement::genCode(){

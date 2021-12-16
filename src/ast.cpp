@@ -102,7 +102,12 @@ code.place = newTemp;
 }
 
 void IdExpr::genCode(Code &code){
-
+    if(floatTempMap.find(this->id) == floatTempMap.end()){
+        string temp = getFloatTemp();
+        code.place = temp;
+        code.code = "l.s "+ temp + ", "+ this->id + "\n";
+        
+    }
 }
 
 string ExprStatement::genCode(){
@@ -120,14 +125,19 @@ void MethodInvocationExpr::genCode(Code &code){
 }
 
 string AssignationStatement::genCode(){
-    gl
-    string var =getFloatTemp();
-    Code rightCode;
-    this->value->genCode(rightCode);
-    rightCode.code;
-    string code = "l.s " + var + ", " + rightCode.place+"\n";
+    
+    Code Code;
+    stringstream ss;
+    
+    this->value->genCode(Code);
 
-    return code;
+    ss<< Code.code <<endl;
+    IdExpr* fullExpre = (IdExpr *)this->value;
+    string id = fullExpre->id;
+    if(floatTempMap.find(id) == floatTempMap.end())
+    releaseFloatTemp(Code.place);
+    Code.code = ss.str();
+    return Code.code;
 }
 
 void GteExpr::genCode(Code &code){
